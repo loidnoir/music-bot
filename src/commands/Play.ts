@@ -1,9 +1,9 @@
-import { ClientColors } from '@constants/ClientPreferences'
 import errorMessage from '@helpers/errorMessage'
+import playerMessage from '@helpers/playerMessage'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
 import { GuildQueue, Track, useMainPlayer, useQueue } from 'discord-player'
-import { EmbedBuilder, Message, bold } from 'discord.js'
+import { Message } from 'discord.js'
 
 export default class Play extends BaseCommand {
 	public data: CommandData = {
@@ -20,9 +20,6 @@ export default class Play extends BaseCommand {
 		let query = msg.content.split(' ').slice(1)
 		const params = query.filter(one => one.startsWith('--'))
 		query = query.filter(one => !one.startsWith('--'))
-
-		console.log(query)
-		console.log(params)
 
 		if (query.length == 0) return errorMessage(msg, 'Երգի լինքը կամ անունը նշված չէ')
 
@@ -74,18 +71,13 @@ export default class Play extends BaseCommand {
 			
 		catch (error) {
 			errorMessage(msg, 'Ձենս կտրվեց, փորձեք կրկին')
+			console.error(error)
 		}
 	}
 
 	public static async playAction(queue: GuildQueue, track: Track) {
 		const msg = queue.metadata as Message<true>
 
-		const embed = new EmbedBuilder()
-			.setAuthor({ name: 'Հիմա խաղում է', iconURL: track.thumbnail })
-			.setDescription(`[${bold(track.title)}](${track.url}), արտիստ ${bold(track.author)} \`${track.duration}\``)
-			.setFooter({ text: `Պատվերը ${track.requestedBy?.displayName + '-ի' ?? 'անհասկանալի մարդու'} կողմից` })
-			.setColor(ClientColors.primary)
-			
-		await msg.channel.send({ embeds: [embed] })
+		await playerMessage(msg, track, 'Հիմա խաղում է')
 	}
 }

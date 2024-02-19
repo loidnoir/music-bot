@@ -1,9 +1,9 @@
-import { ClientColors } from '@constants/ClientPreferences'
 import errorMessage from '@helpers/errorMessage'
+import { skipMessage } from '@helpers/playerMessage'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
 import { GuildQueue, Track, useQueue } from 'discord-player'
-import { EmbedBuilder, Message } from 'discord.js'
+import { Message } from 'discord.js'
 
 export default class Skip extends BaseCommand {
 	public data: CommandData = {
@@ -40,13 +40,6 @@ export default class Skip extends BaseCommand {
 	public static async skipAction(queue: GuildQueue, track: Track) {
 		const msg = queue.metadata as Message<true>
 
-		const embed = new EmbedBuilder()
-			// .setAuthor({ name: 'Երգը անցանք', iconURL: track.thumbnail })
-			// .setDescription(`[${bold(track.title)}](${track.url}), արտիստ ${bold(track.author)} երգը փոխվեց`)
-			// .setFooter({ text: `Պատվերը ${track.requestedBy?.displayName}-ի կողմից` })
-			.setDescription('Փոխում ենք...')
-			.setColor(ClientColors.action)
-			
-		await msg.channel.send({ embeds: [embed] })
+		skipMessage(msg)
 	}
 }
