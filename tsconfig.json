@@ -1,0 +1,36 @@
+{
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
+    },
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "CommonJS",
+        "target": "ESNext",
+        "lib": [
+            "ESNext"
+        ],
+        "strict": true,
+        "allowJs": true,
+        "checkJs": true,
+        "sourceMap": true,
+        "rootDir": "./src",
+        "outDir": "./build",
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "baseUrl": "src",
+        "paths": {
+            "@commands/*": ["commands/*"],
+            "@events/*": ["events/*"],
+            "@constants/*": ["constants/*"],
+            "@helpers/*": ["helpers/*"],
+            "@structures/*": ["structures/*"],
+            "@actions/*": ["actions/*"],
+        }
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
