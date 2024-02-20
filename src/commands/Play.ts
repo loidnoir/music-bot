@@ -33,7 +33,7 @@ export default class Play extends BaseCommand {
 
 		if (!params.includes('--no-var') && !params.includes('--nv')) {
 			const guildModel = await GuildModel.cache(client, msg.guildId)
-			const alias = guildModel.aliases.find((alias) => alias.name === query.join(' '))
+			const alias = guildModel.aliases.find((alias) => alias.name === query.join(' ').trim())
 
 			if (alias) {
 				query = alias.value.split(' ')
@@ -64,7 +64,7 @@ export default class Play extends BaseCommand {
 		}
 
 		try {
-			player.play(channel!, query.join(' '), {
+			player.play(channel!, query.join(' ').trim(), {
 				requestedBy: msg.member,
 				nodeOptions: {
 					metadata: msg,
