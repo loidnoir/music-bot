@@ -25,7 +25,7 @@ export default class Help extends BaseCommand {
 			.setColor(ClientColors.secondary)
 		
 		if (commandName) {
-			const command = client.commands.get(commandName)
+			const command = client.commands.get(commandName) ?? client.commands.find((cmd) => cmd.data.aliases.includes(commandName))
 
 			if (!command) return errorMessage(msg, 'Այդպիսի հրաման գոյություն չունի')
 
