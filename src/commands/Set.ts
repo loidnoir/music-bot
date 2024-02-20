@@ -1,20 +1,21 @@
+import { ClientColors } from '@constants/ClientPreferences'
 import errorMessage from '@helpers/errorMessage'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
 import GuildModel from '@structures/GuildModel'
-import { Message } from 'discord.js'
+import { EmbedBuilder, Message } from 'discord.js'
 
 export default class Alias extends BaseCommand {
 	public data: CommandData = {
 		name: 'set',
 		aliases: ['alias', 'let', 'pin', 'star'],
 		args: ['name', 'value'],
-		params: ['--delete --d', '--create --c', '--edit --e']
+		params: ['--delete --d', '--create --c', '--edit --e', '--list --l']
 	}
 
 	public settings: CommandSettings = {
 		cooldown: 3,
-		djOnly: false
+		djOnly: true
 	}
 
 	public async run(client: BaseClient, msg: Message<true>): Promise<void> {
@@ -22,7 +23,16 @@ export default class Alias extends BaseCommand {
 		const params = msg.content.split(' ').slice(1).filter((param) => param.startsWith('--'))
 		const args = msg.content.split(' ').slice(1).filter((param) => !param.startsWith('--'))
 
-		if (params.includes('--delete') || params.includes('--d')) {
+		if (params.includes('--list') || params.includes('--l')) {
+			const embed = new EmbedBuilder()
+				.setColor(ClientColors.secondary)
+				.setAuthor({ name: 'Փոփոխականների ցանկ' })
+				.setDescription(guildModel.aliases.map(alias => `${alias.name} \`${alias.value}\``).join('\n'))
+
+			msg.channel.send({ embeds: [embed] })
+		}
+
+		else if (params.includes('--delete') || params.includes('--d')) {
 			const name = args[0]
 
 			guildModel.aliases = guildModel.aliases.filter((alias) => alias.name !== name)
@@ -64,7 +74,7 @@ export default class Alias extends BaseCommand {
 
 			if (!alias) return errorMessage(msg, 'Փոփոխականը չի գտնվել')
 
-			await msg.channel.send(`**${alias.name}** փոփոխականը պարունակությունն է \`${alias.value}\``)
+			msg.channel.send(`**${alias.name}** փոփոխականը պարունակությունն է \`${alias.value}\``)
 		}
 	}
 }
