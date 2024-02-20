@@ -11,7 +11,7 @@ export default class Play extends BaseCommand {
 		name: 'play',
 		aliases: ['p', 'ergi'],
 		args: ['song/url'],
-		params: ['--force', '--f', '--no-var', '--nv']
+		params: ['--force --f', '--no-var --nv']
 	}
     
 	public settings: CommandSettings = {

@@ -6,10 +6,10 @@ import { Message } from 'discord.js'
 
 export default class Alias extends BaseCommand {
 	public data: CommandData = {
-		name: 'alias',
-		aliases: ['var', 'let', 'const'],
+		name: 'set',
+		aliases: ['alias', 'let', 'pin', 'star'],
 		args: ['name', 'value'],
-		params: ['--delete', '--create', '--edit', '--d', '--c', '--e']
+		params: ['--delete --d', '--create --c', '--edit --e']
 	}
 
 	public settings: CommandSettings = {
@@ -34,7 +34,7 @@ export default class Alias extends BaseCommand {
 			const value = args.slice(1).join(' ')
 
 			if (guildModel.aliases.some((alias) => alias.name === name)) return errorMessage(msg, 'Փոփոխականը արդեն գոյություն ունի')
-			if (guildModel.aliases.length > 50) return errorMessage(msg, 'Ամենաշատը կարող եք ստեղծել 50 փոփոխական')
+			if (guildModel.aliases.length > 100) return errorMessage(msg, 'Ամենաշատը կարող եք ստեղծել 50 փոփոխական')
 			if (name.includes('^') || name.includes(';')) return errorMessage(msg, 'Փոփոխականների անունը չի կարող պարունակել `^` և `;` նշանը')
 			if (value.includes('^') || value.includes(';')) return errorMessage(msg, 'Փոփոխականների արժեքը չի կարող պարունակել `^` և `;` նշանը')
 			if (value.length > 200) return errorMessage(msg, 'Փոփոխականների երկարությունը չի կարող գերազանցել 200 նիշը')

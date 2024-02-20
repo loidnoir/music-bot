@@ -9,7 +9,7 @@ export default class Loop extends BaseCommand {
 	public data: CommandData = {
 		name: 'loop',
 		aliases: ['l'],
-		params: ['--track', '--queue', '--autoplay', '--t', '--q', '--a']
+		params: ['--track --t', '--queue --q', '--autoplay --a']
 	}
     
 	public settings: CommandSettings = {
