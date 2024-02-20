@@ -2,6 +2,7 @@ import errorMessage from '@helpers/errorMessage'
 import playerMessage from '@helpers/playerMessage'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
+import GuildModel from '@structures/GuildModel'
 import { GuildQueue, Track, useMainPlayer, useQueue } from 'discord-player'
 import { Message } from 'discord.js'
 
@@ -56,7 +57,7 @@ export default class Play extends BaseCommand {
 			player.play(channel!, query.join(' '), {
 				requestedBy: msg.member,
 				nodeOptions: {
-					metadata: msg,
+					metadata: [msg, client],
 					leaveOnEmpty: true,
 					leaveOnEmptyCooldown: 60000,
 					leaveOnStop: true,
@@ -76,7 +77,10 @@ export default class Play extends BaseCommand {
 	}
 
 	public static async playAction(queue: GuildQueue, track: Track) {
-		const msg = queue.metadata as Message<true>
+		const [msg, client]: [Message<true>, BaseClient] = queue.metadata as [Message<true>, BaseClient]
+		const guildModel = await GuildModel.cache(client, msg.guildId)
+
+		if (guildModel.loop) return
 
 		playerMessage(msg, track, 'Հիմա խաղում է')
 	}

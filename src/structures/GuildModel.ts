@@ -2,9 +2,11 @@ import BaseClient from './BaseClient'
 
 export default class GuildModel {
 	public data: GuildModelData
+	public loop: boolean
 
 	constructor(data: GuildModelData) {
 		this.data = data
+		this.loop = false
 	}
 
 	public static async cache(client: BaseClient, id: string): Promise<GuildModel> {

@@ -43,7 +43,7 @@ export default class BaseClient extends Client {
 		this.player.events.on('audioTrackAdd', async (queue, track) => Queue.addAction(queue, track))
 		this.player.events.on('playerSkip', async (queue, track) => Skip.skipAction(queue, track))
 		this.player.events.on('playerError', async (queue, err) => {
-			errorMessage(queue.metadata, 'Տեղի ունեցավ սխալմուն\n\n### Հնարավոր լուծումներ\n- Նշված երգը, տեսահոլովակը ունի տարիքային սահման')
+			errorMessage(queue.metadata, 'Տեղի ունեցավ սխալմունք\n### Հնարավոր լուծումներ\n- Նշված երգը/տեսահոլովակը ունի տարիքային սահման')
 			console.error(err)
 		})
 	}
