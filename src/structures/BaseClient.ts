@@ -39,7 +39,7 @@ export default class BaseClient extends Client {
 		this.player.extractors.loadDefault()
 		// this.player.extractors.register(DeezerExtractor, {})
 
-		this.player.events.on('playerStart', async (queue, track) => Play.playAction(queue, track))
+		this.player.events.on('playerStart', async (queue, track) => Play.playAction(this, queue, track))
 		this.player.events.on('audioTrackAdd', async (queue, track) => Queue.addAction(queue, track))
 		this.player.events.on('playerSkip', async (queue, track) => Skip.skipAction(queue, track))
 		this.player.events.on('playerError', async (queue, err) => {

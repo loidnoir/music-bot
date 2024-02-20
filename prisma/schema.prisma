@@ -12,6 +12,7 @@ datasource db {
 
 model Guild {
   id String @id
+  aliases String @default("")
   prefix String @default("-")
   djRole String?
   djSystem Boolean @default(false)
