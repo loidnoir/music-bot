@@ -9,7 +9,9 @@ import { Message } from 'discord.js'
 export default class Play extends BaseCommand {
 	public data: CommandData = {
 		name: 'play',
-		aliases: ['p', 'ergi']
+		aliases: ['p', 'ergi'],
+		args: ['song/url'],
+		params: ['--force', '--f', '--no-var', '--nv']
 	}
     
 	public settings: CommandSettings = {
@@ -29,6 +31,14 @@ export default class Play extends BaseCommand {
         
 		if (!channel || !player) return errorMessage(msg, 'Առանց ձայնային ալիք միանալու երգել չեմ կարող')
 
+		if (!params.includes('--no-var') && !params.includes('--nv')) {
+			const guildModel = await GuildModel.cache(client, msg.guildId)
+			const alias = guildModel.aliases.find((alias) => alias.name === query.join(' '))
+
+			if (alias) {
+				query = alias.value.split(' ')
+			}
+		}
 
 		if (params.includes('--f') || params.includes('--force')) {
 			const queue = useQueue(msg.guildId)
@@ -57,7 +67,7 @@ export default class Play extends BaseCommand {
 			player.play(channel!, query.join(' '), {
 				requestedBy: msg.member,
 				nodeOptions: {
-					metadata: [msg, client],
+					metadata: msg,
 					leaveOnEmpty: true,
 					leaveOnEmptyCooldown: 60000,
 					leaveOnStop: true,
@@ -76,8 +86,8 @@ export default class Play extends BaseCommand {
 		}
 	}
 
-	public static async playAction(queue: GuildQueue, track: Track) {
-		const [msg, client]: [Message<true>, BaseClient] = queue.metadata as [Message<true>, BaseClient]
+	public static async playAction(client: BaseClient, queue: GuildQueue, track: Track) {
+		const msg: Message<true> = queue.metadata as Message<true>
 		const guildModel = await GuildModel.cache(client, msg.guildId)
 
 		if (guildModel.loop) return

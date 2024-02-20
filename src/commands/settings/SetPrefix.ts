@@ -7,7 +7,8 @@ import { Message } from 'discord.js'
 export default class SetPrefix extends BaseCommand {
 	public data: CommandData = {
 		name: 'setprefix',
-		aliases: ['stp']
+		aliases: ['stp'],
+		args: ['prefix']
 	}
 
 	public settings: CommandSettings = {

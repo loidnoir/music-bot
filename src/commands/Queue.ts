@@ -21,7 +21,7 @@ export default class Queue extends BaseCommand {
 		const queue = player.queues.get(msg.guildId)
 		const tracks = queue?.tracks.toArray().slice(0, 5)
 
-		if (!queue?.currentTrack || !tracks || !tracks.length) return errorMessage(msg, 'Հերթը դատարկ է')
+		if (!queue?.currentTrack || !tracks || !tracks.length) return errorMessage(msg, 'Ցանկը դատարկ է')
 
 		queueMessage(msg, queue.currentTrack, queue, tracks)
 	}
@@ -31,6 +31,6 @@ export default class Queue extends BaseCommand {
 
 		if (queue.tracks.size === 1) return
 
-		playerMessage(msg, track, 'Երգը ավելացվեծ')
+		playerMessage(msg, track, 'Ավելացվեծ ցանկ')
 	}
 }

@@ -8,7 +8,8 @@ import { Message } from 'discord.js'
 export default class Skip extends BaseCommand {
 	public data: CommandData = {
 		name: 'skip',
-		aliases: ['s', 'sikp', 'sik']
+		aliases: ['s', 'sikp', 'sik'],
+		args: ['amount']
 		
 	}
 

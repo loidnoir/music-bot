@@ -8,7 +8,8 @@ import { Message } from 'discord.js'
 export default class Loop extends BaseCommand {
 	public data: CommandData = {
 		name: 'loop',
-		aliases: ['l']
+		aliases: ['l'],
+		params: ['--track', '--queue', '--autoplay', '--t', '--q', '--a']
 	}
     
 	public settings: CommandSettings = {
@@ -36,7 +37,7 @@ export default class Loop extends BaseCommand {
 			guildModel.loop = true
 		}
 
-		else if (params.includes('--autoplay') || params.includes('--auto') || params.includes('--a')) {
+		else if (params.includes('--autoplay') || params.includes('--a')) {
 			queue?.setRepeatMode(3)
 			guildModel.loop = true
 		}

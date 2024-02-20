@@ -7,7 +7,8 @@ import { Message } from 'discord.js'
 export default class SetDJ extends BaseCommand {
 	public data: CommandData = {
 		name: 'setdj',
-		aliases: ['sdj']
+		aliases: ['sdj'],
+		args: ['role/id']
 	}
 
 	public settings: CommandSettings = {
