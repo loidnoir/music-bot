@@ -29,6 +29,8 @@ export default class Alias extends BaseCommand {
 				.setAuthor({ name: 'Փոփոխականների ցանկ' })
 				.setDescription(guildModel.aliases.map(alias => `${alias.name} \`${alias.value}\``).join('\n'))
 
+			if (embed.data.description === '') embed.setDescription('Փոփոխականներ չկան')
+
 			msg.channel.send({ embeds: [embed] })
 		}
 
