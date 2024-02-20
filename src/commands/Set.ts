@@ -8,7 +8,7 @@ import { EmbedBuilder, Message } from 'discord.js'
 export default class Alias extends BaseCommand {
 	public data: CommandData = {
 		name: 'set',
-		aliases: ['alias', 'let', 'pin', 'star'],
+		aliases: ['alias', 'let', 'var', 'pin', 'star'],
 		args: ['name', 'value'],
 		params: ['--delete --d', '--create --c', '--edit --e', '--list --l']
 	}
@@ -78,5 +78,7 @@ export default class Alias extends BaseCommand {
 
 			msg.channel.send(`**${alias.name}** փոփոխականը պարունակությունն է \`${alias.value}\``)
 		}
+
+		msg.react('✅')
 	}
 }
