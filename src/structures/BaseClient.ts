@@ -1,16 +1,17 @@
 import ClientOptions from '@constants/ClientOptions'
 import ClientSecrets from '@constants/ClientSecrets'
+import errorMessage from '@helpers/errorMessage'
 import { PrismaClient } from '@prisma/client'
+import { Player } from 'discord-player'
 import { Client, Collection } from 'discord.js'
 import glob from 'glob'
 import { promisify } from 'util'
-import BaseEvent from './BaseEvent'
-import BaseCommand from './BaseCommand'
-import { Player } from 'discord-player'
-import GuildModel from './GuildModel'
 import Play from '../commands/Play'
 import Queue from '../commands/Queue'
 import Skip from '../commands/Skip'
+import BaseCommand from './BaseCommand'
+import BaseEvent from './BaseEvent'
+import GuildModel from './GuildModel'
 
 export default class BaseClient extends Client {
 	public player: Player
@@ -38,9 +39,13 @@ export default class BaseClient extends Client {
 		this.player.extractors.loadDefault()
 		// this.player.extractors.register(DeezerExtractor, {})
 
-		this.player.events.on('playerStart', async (queue, track) => await Play.playAction(queue, track))
-		this.player.events.on('audioTrackAdd', async (queue, track) => await Queue.addAction(queue, track))
-		this.player.events.on('playerSkip', async (queue, track) => await Skip.skipAction(queue, track))
+		this.player.events.on('playerStart', async (queue, track) => Play.playAction(queue, track))
+		this.player.events.on('audioTrackAdd', async (queue, track) => Queue.addAction(queue, track))
+		this.player.events.on('playerSkip', async (queue, track) => Skip.skipAction(queue, track))
+		this.player.events.on('playerError', async (queue, err) => {
+			errorMessage(queue.metadata, 'Տեղի ունեցավ սխալմուն\n\n### Հնարավոր լուծումներ\n- Նշված երգը, տեսահոլովակը ունի տարիքային սահման')
+			console.error(err)
+		})
 	}
 
 	private async loadEvents(path: string) {

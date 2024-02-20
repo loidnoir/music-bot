@@ -31,6 +31,6 @@ export default class Queue extends BaseCommand {
 
 		if (queue.tracks.size === 1) return
 
-		await playerMessage(msg, track, 'Երգը ավելացվեծ')
+		playerMessage(msg, track, 'Երգը ավելացվեծ')
 	}
 }

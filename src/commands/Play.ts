@@ -53,7 +53,7 @@ export default class Play extends BaseCommand {
 		}
 
 		try {
-			await player.play(channel!, query.join(' '), {
+			player.play(channel!, query.join(' '), {
 				requestedBy: msg.member,
 				nodeOptions: {
 					metadata: msg,
@@ -78,6 +78,6 @@ export default class Play extends BaseCommand {
 	public static async playAction(queue: GuildQueue, track: Track) {
 		const msg = queue.metadata as Message<true>
 
-		await playerMessage(msg, track, 'Հիմա խաղում է')
+		playerMessage(msg, track, 'Հիմա խաղում է')
 	}
 }

@@ -22,8 +22,6 @@ export default class Skip extends BaseCommand {
 		const queue = useQueue(msg.guildId)
 		const amount = parseInt(rawAmount) ?? 1
 
-		console.log(amount)
-
 		if (amount > 1) {
 			const tracks = queue?.tracks.toArray()
 			
