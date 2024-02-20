@@ -11,6 +11,8 @@ export default abstract class BaseCommand {
 export interface CommandData {
 	name: string,
 	aliases: string[],
+	args?: string[]
+	params?: string[]
 }
 
 export interface CommandSettings {
