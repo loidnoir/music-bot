@@ -25,6 +25,7 @@ export default class Loop extends BaseCommand {
 		if (guildModel.loop) {
 			queue?.setRepeatMode(0)
 			guildModel.loop = false
+			msg.react('🔁')
 		}
 
 		else if (params.length == 0 || params.includes('--track') || params.includes('--t')) {
@@ -47,6 +48,6 @@ export default class Loop extends BaseCommand {
 			return
 		}
 
-		msg.react('👌')
+		msg.react('🔂')
 	}
 }
