@@ -20,7 +20,7 @@ export default async function playerMessage(msg: Message<true>, track: Track, ac
 
 export async function queueMessage(msg: Message<true>, track: Track, queue: GuildQueue, tracks: Track[], pageData: { edit?: boolean, actionRow: ActionRowBuilder<MessageActionRowComponentBuilder>, page: number, perPage: number, maxPage: number }) {
 	const queueTracks = tracks
-		.map((track: Track, index: number) => { return `\`${((pageData.page-1) * pageData.perPage) + index + 1}\` [${bold(track.title.length > 15 ? track.title.slice(0, 15) + '...' : track.title)}](${track.url}), արտիստ ${bold(track.author)}` })
+		.map((track: Track, index: number) => { return `\`${((pageData.page-1) * pageData.perPage) + index + 1}\` [${bold(track.title.length > 15 ? track.title.substring(0, 16) + '...' : track.title)}](${track.url}), արտիստ ${bold(track.author)}` })
 		.join('\n')
 	
 	const embed = constructEmbed(track, 'Հիմա խաղում է')
