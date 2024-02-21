@@ -1,5 +1,6 @@
 import errorMessage from '@helpers/errorMessage'
 import playerMessage, { queueMessage } from '@helpers/playerMessage'
+import useChannel from '@helpers/useChannel'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
 import { GuildQueue, Track, useMainPlayer } from 'discord-player'
@@ -20,7 +21,9 @@ export default class Queue extends BaseCommand {
 		const player = useMainPlayer()
 		const queue = player.queues.get(msg.guildId)
 		const tracks = queue?.tracks.toArray().slice(0, 5)
+		const channel = useChannel(msg.guild, msg.author.id)
 
+		if (queue?.channel?.id	!= channel?.id) return errorMessage(msg, 'Դուք չեք գտնվում ինձ հետ նույն ալիքում')
 		if (!queue?.currentTrack || !tracks || !tracks.length) return errorMessage(msg, 'Ցանկը դատարկ է')
 
 		queueMessage(msg, queue.currentTrack, queue, tracks)

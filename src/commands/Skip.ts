@@ -1,5 +1,6 @@
 import errorMessage from '@helpers/errorMessage'
 import { skipMessage } from '@helpers/playerMessage'
+import useChannel from '@helpers/useChannel'
 import BaseClient from '@structures/BaseClient'
 import BaseCommand, { CommandData, CommandSettings } from '@structures/BaseCommand'
 import { GuildQueue, Track, useQueue } from 'discord-player'
@@ -22,6 +23,9 @@ export default class Skip extends BaseCommand {
 		const [rawAmount] = msg.content.split(' ').slice(1)
 		const queue = useQueue(msg.guildId)
 		const amount = parseInt(rawAmount) ?? 1
+		const channel = useChannel(msg.guild, msg.author.id)
+
+		if (queue?.channel?.id	!= channel?.id) return errorMessage(msg, 'Դուք չեք գտնվում ինձ հետ նույն ալիքում')
 
 		if (amount > 1) {
 			const tracks = queue?.tracks.toArray()

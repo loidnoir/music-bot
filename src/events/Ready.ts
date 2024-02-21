@@ -21,6 +21,8 @@ export default class Ready extends BaseEvent {
 		const globPromise = promisify(glob)
 		const commandsFiles = await globPromise(path)
 
+		client.application?.commands.set([])
+
 		commandsFiles.forEach(async (commandFile: string) => {
 			try {
 				const file = await import(commandFile)
