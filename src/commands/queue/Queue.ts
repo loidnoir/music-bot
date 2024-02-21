@@ -9,7 +9,9 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, MessageActionRow
 export default class Queue extends BaseCommand {
 	public data: CommandData = {
 		name: 'queue',
-		aliases: ['q', 'ls']
+		aliases: ['q', 'ls'],
+		args: ['index/song'],
+		params: ['--play --p', '--remove --r', '--skip --s']
 	}
     
 	public settings: CommandSettings = {
@@ -25,6 +27,34 @@ export default class Queue extends BaseCommand {
 		
 		if (queue?.channel?.id	!= channel?.id) return errorMessage(msg, 'Դուք չեք գտնվում ինձ հետ նույն ալիքում')
 		if (!queue?.currentTrack || !tracks || !tracks.length) return errorMessage(msg, 'Ցանկը դատարկ է')
+
+		const [rawIndex] = msg.content.split(' ').slice(1)
+		const index = parseInt(rawIndex)
+
+		if (index > 0) {
+			const params = msg.content.split(' ').filter(one => one.startsWith('--'))
+			const track = isNaN(index) ? queue.tracks.find(track => track.title.toLowerCase().includes(rawIndex)) : queue.tracks.toArray()[index - 1]
+
+			if (!track) return errorMessage(msg, 'Այդպիսի անվանումով կամ համարով երգ չկա ցանկում')
+
+			if (params.includes('--play') || params.includes('--p')) {
+				queue.moveTrack(track, 0)
+
+				if (params.includes('--skip') || params.includes('--s')) {
+					queue.node.skip()
+				}
+
+				msg.react('✅')
+				return
+			}
+
+			else if (params.includes('--remove') || params.includes('--r')) {
+				queue.tracks.removeOne(one => one.id ==  track.id)
+
+				msg.react('🗑️')
+				return
+			}
+		}
 		
 		Queue.getPage(msg, 1, false)
 	}
