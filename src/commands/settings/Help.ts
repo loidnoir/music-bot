@@ -9,7 +9,8 @@ export default class Help extends BaseCommand {
 	public data: CommandData = {
 		name: 'help',
 		aliases: ['h'],
-		args: ['command']
+		args: ['command'],
+		params: ['--list', '--l']
 	}
 
 	public settings: CommandSettings = {
@@ -19,6 +20,7 @@ export default class Help extends BaseCommand {
 	public async run(client: BaseClient, msg: Message<true>): Promise<void> {
 		const guildModel = await GuildModel.cache(client, msg.guildId)
 		const prefix = guildModel.data.prefix
+		const params = msg.content.split(' ').filter(one => one.startsWith('--'))
 		const commandName = msg.content.split(' ').slice(1)[0]
 		
 		const embed = new EmbedBuilder()
@@ -49,6 +51,10 @@ export default class Help extends BaseCommand {
 					}
 				])
 				.setFooter({ text: `Cooldown ${command.settings.cooldown} վայրկյան` })
+		}
+
+		else if (params.includes('--list') || params.includes('--l')) {
+			embed.setDescription(client.commands.map(command => `${prefix}${command.data.name}`).join('\n'))
 		}
 
 		else {
