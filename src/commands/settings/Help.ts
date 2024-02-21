@@ -26,7 +26,11 @@ export default class Help extends BaseCommand {
 		const embed = new EmbedBuilder()
 			.setColor(ClientColors.secondary)
 		
-		if (commandName) {
+		if (params.includes('--list') || params.includes('--l')) {
+			embed.setDescription(client.commands.map(command => `${prefix}${command.data.name}`).join('\n'))
+		}
+		
+		else if (commandName) {
 			const command = client.commands.get(commandName) ?? client.commands.find((cmd) => cmd.data.aliases.includes(commandName))
 
 			if (!command) return errorMessage(msg, 'Այդպիսի հրաման գոյություն չունի')
@@ -51,10 +55,6 @@ export default class Help extends BaseCommand {
 					}
 				])
 				.setFooter({ text: `Cooldown ${command.settings.cooldown} վայրկյան` })
-		}
-
-		else if (params.includes('--list') || params.includes('--l')) {
-			embed.setDescription(client.commands.map(command => `${prefix}${command.data.name}`).join('\n'))
 		}
 
 		else {
