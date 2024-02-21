@@ -19,6 +19,7 @@ export default class Lyrics extends BaseCommand {
 	public async run(client: BaseClient, msg: Message<true>): Promise<void> {
 		const title = msg.content.split(' ').slice(1)
 
+		if (title.length == 0) return errorMessage(msg, 'Երաժշտւոյթան անվանումը բացակայում է')
 		if (!title) return errorMessage(msg, 'Խնդրում եմ նշեք երաժշտության անվանումը')
 
 		const req = await lyricsExtractor().search(title.join(' ')).catch(() => null)
