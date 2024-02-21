@@ -34,9 +34,11 @@ export async function queueMessage(msg: Message<true>, track: Track, queue: Guil
 }
 
 export async function skipMessage(msg: Message<true>) {
+	const queue = useQueue(msg.guildId)
 	const track = useQueue(msg.guildId)?.tracks.toArray()[0]
 
 	if (!track) return
+	if (queue?.isShuffling) return
 
 	const embed = constructEmbed(track, 'Երգը անցանք...')
 		
