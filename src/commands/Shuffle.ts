@@ -22,11 +22,9 @@ export default class Shuffle extends BaseCommand {
 
 		if (queue.isShuffling) {
 			queue.disableShuffle()
-			console.log('Anjatvec')
 		}
 		
 		else {
-			console.log('Miacrec')
 			queue.enableShuffle(true)
 		}
 
