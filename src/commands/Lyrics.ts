@@ -1,4 +1,5 @@
 import { ClientColors } from '@constants/ClientPreferences'
+import ClientSecrets from '@constants/ClientSecrets'
 import { lyricsExtractor } from '@discord-player/extractor'
 import errorMessage from '@helpers/errorMessage'
 import BaseClient from '@structures/BaseClient'
@@ -22,7 +23,7 @@ export default class Lyrics extends BaseCommand {
 		if (title.length == 0) return errorMessage(msg, 'Երաժշտւոյթան անվանումը բացակայում է')
 		if (!title) return errorMessage(msg, 'Խնդրում եմ նշեք երաժշտության անվանումը')
 
-		const req = await lyricsExtractor().search(title.join(' ')).catch(() => null)
+		const req = await lyricsExtractor(ClientSecrets.geniusKey).search(title.join(' ')).catch(() => null)
         
 		if (!req) return errorMessage(msg, 'Այդպիսի անվանումով չկարողացա գտնել')
 
