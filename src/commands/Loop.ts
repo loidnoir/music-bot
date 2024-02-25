@@ -26,6 +26,7 @@ export default class Loop extends BaseCommand {
 			queue?.setRepeatMode(0)
 			guildModel.loop = false
 			msg.react('🔁')
+			return
 		}
 
 		else if (params.length == 0 || params.includes('--track') || params.includes('--t')) {
