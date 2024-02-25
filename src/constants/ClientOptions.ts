@@ -22,8 +22,8 @@ const ClientOptions: ClientOptionsType = {
 	presence: {
 		activities: [
 			{
-				name: 'League of Legends',
-				type: ActivityType.Playing
+				name: 'Avatar the last airbender',
+				type: ActivityType.Watching
 			}
 		]
 	}
