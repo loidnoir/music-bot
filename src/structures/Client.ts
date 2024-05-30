@@ -39,24 +39,22 @@ export default class extends BaseClient {
 		const directoryPath = path.join(__dirname, '../commands')
 		const stack = [directoryPath]
 
-		;(async () => {
-			while (stack.length > 0) {
-				const currentPath = stack.pop()
-				const entries = fs.readdirSync(currentPath!, { withFileTypes: true })
+		while (stack.length > 0) {
+			const currentPath = stack.pop()
+			const entries = fs.readdirSync(currentPath!, { withFileTypes: true })
 
-				for (const entry of entries) {
-					const fullPath = path.join(currentPath!, entry.name)
+			for (const entry of entries) {
+				const fullPath = path.join(currentPath!, entry.name)
 
-					if (entry.isDirectory()) {
-						stack.push(fullPath)
-					} else if (entry.isFile()) {
-						const command: Command = new (await import(fullPath)).default(this)
-						console.log(command.name)
-						this.commands.set(command.name, command)
-					}
+				if (entry.isDirectory()) {
+					stack.push(fullPath)
+				} else if (entry.isFile()) {
+					const command: Command = new (await import(fullPath)).default(this)
+					console.log(command.name)
+					this.commands.set(command.name, command)
 				}
 			}
-		})()
+		}
 	}
 
 	public async loadPlayer() {
