@@ -1,53 +1,51 @@
-import BaseEvent, { EventData } from '@structures/BaseEvent'
-import BaseClient from '@structures/BaseClient'
-import { Message, bold } from 'discord.js'
-import GuildModel from '@structures/GuildModel'
-import errorMessage from '@helpers/errorMessage'
+import getPrefix from '@actions/getPrefix'
+import sendError from '@actions/sendError'
+import Client from '@structures/Client'
+import Command from '@structures/Command'
+import Event from '@structures/Event'
 
+import { ClientEvents, Message as DiscordMessage } from 'discord.js'
+export default class extends Event {
+	public name: keyof ClientEvents = 'messageCreate'
+	public once: boolean = false
+	public client: Client
 
-export default class MessageEvent extends BaseEvent {
-	public data: EventData = {
-		name: 'messageCreate',
-		once: false
+	constructor(client: Client) {
+		super()
+		this.client = client
 	}
 
-	public async run(client: BaseClient, msg: Message<true>): Promise<void> {
-		const guildMdel = await GuildModel.cache(client, msg.guild.id)
-		const prefix = guildMdel.data.prefix
+	public async execute(msg: DiscordMessage): Promise<void> {
+		if (!msg.inGuild()) return
+
+		const prefix = await getPrefix(this.client, msg)
 
 		if (!msg.content.startsWith(prefix) || msg.author.bot) return
 
-		const args = msg.content.slice(prefix.length).trim().split(' ')
+		const params = msg.content.slice(prefix.length).trim().split(' ')
 
-		if (!args.length) return
-
-		const commandName = args[0]
-		const command = client.commands.get(commandName) ?? client.commands.find(cmd => cmd.data.aliases && cmd.data.aliases.includes(commandName))
-
-		if (!command) return
-
-		const cooldown = client.cooldown.get(`${msg.author.id}-${command.data.name}`)
-
-		if (cooldown && cooldown.getTime() > Date.now()) {
-			const timeLeft = (cooldown.getTime() - Date.now()) / 1000
-			return errorMessage(msg, `Կխնդրեմ միքիչ դանդաղ, փորձեք նորից ${bold(timeLeft.toFixed(1))} վայրկյանից`)
+		if (!params.length) {
+			sendError(msg, 'noParams')
+			return
 		}
 
-		else {
-			if (command.settings.cooldown > 0) {
-				client.cooldown.set(`${msg.author.id}-${command.data.name}`, new Date(Date.now() + command.settings.cooldown * 1000))
-			}
+		const commandName = params[0].toLowerCase()
+		const command = this.client.commands
+			.filter((comamnd: Command) => comamnd.name.includes(commandName))
+			.first()
+
+		if (!command) {
+			sendError(msg, 'wrongCommand')
+			return
 		}
 
-		if (command.settings.djOnly && guildMdel.data.djSystem) {
-			if (!guildMdel.data.djRole) return errorMessage(msg, 'DJ դերը չի սահմանված չնայած նրան, որ սերվերում միացված է DJonly մոդը')
-			if (!msg.member?.roles.cache.has(guildMdel.data.djRole)) return	errorMessage(msg, 'Դուք չունեք DJ դերը')
-		}
+		const args = command.loadArgs(
+			params.slice(1).filter((param) => !param.startsWith('--')),
+		)
+		const flags = command.loadFlags(
+			params.slice(1).filter((param) => param.startsWith('--')),
+		)
 
-		if (command.settings.modOnly && !msg.member?.permissions.has('ManageGuild')) {
-			return errorMessage(msg, `Դուք չունեք ${bold('ManageRole')} արտոնություն, որը հարկավոր է ներկա հրամանի օգտագործման համար`)
-		}
-
-		command.run(client, msg)
+		command.execute(msg, args, flags)
 	}
 }
