@@ -1,34 +1,50 @@
-import Queue from '@commands/queue/Queue'
-import BaseClient from '@structures/BaseClient'
-import BaseEvent, { EventData } from '@structures/BaseEvent'
-import { Interaction as InteractionType } from 'discord.js'
+import Queue from '@commands/Queue'
+import Client from '@structures/Client'
+import Event from '@structures/Event'
+import {
+	ClientEvents,
+	Interaction as DiscordInteraction,
+	GuildTextBasedChannel,
+	Message,
+} from 'discord.js'
 
-export default class Interaction extends BaseEvent {
-	public data: EventData = {
-		name: 'interactionCreate',
-		once: false
+export default class extends Event {
+	public name: keyof ClientEvents = 'interactionCreate'
+	public once: boolean = false
+	public client: Client
+
+	constructor(client: Client) {
+		super()
+		this.client = client
 	}
 
-	public run(client: BaseClient, int: InteractionType<'cached'>): void {
-		if (int.isButton()) {
-			if (int.customId.startsWith('queue')) {
-				const parts = int.customId.split('-')
-				const type = parts[1]
-				const maxPage = parseInt(parts[3])
-				let page = parseInt(parts[2])
+	public execute(ctx: DiscordInteraction): void {
+		if (ctx.isButton()) {
+			if (ctx.customId.startsWith('queue')) {
+				const params = ctx.customId.split('-')
 
-				if (type == 'prev') {
+				const action = params[1]
+				const maxPage = parseInt(params[3])
+				let page = parseInt(params[2])
+
+				if (action == 'prev') {
 					if (page == 1) page = maxPage
 					else page -= 1
-				}
-
-				else {
+				} else if (action == 'next') {
 					if (page == maxPage) page = 1
 					else page += 1
 				}
 
-				Queue.getPage(int.message, page, true)
-				int.deferUpdate()
+				const status = Queue.sendPage(
+					ctx.channel as GuildTextBasedChannel,
+					page,
+					true,
+					ctx.message as Message<true>,
+				)
+
+				if (!status) return
+
+				ctx.deferUpdate()
 			}
 		}
 	}
