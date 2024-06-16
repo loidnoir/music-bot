@@ -7,4 +7,5 @@ export default {
 	emptyQueue: 'Հերթը դատարկ է',
 	wrongInt: 'Նշված համարանիշը սխալ է',
 	undefinedSongIndex: 'Այդպիսի համարանշով երաժշտություն գոյություն չունի',
+	undefinedLyrics: 'Այդպիսի երաժշտության բառերը չգտնվեցին',
 }

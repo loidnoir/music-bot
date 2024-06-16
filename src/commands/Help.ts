@@ -6,6 +6,7 @@ import { EmbedBuilder, Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string | undefined
 	public name: string[] = ['help', 'h']
 
 	constructor(client: Client) {

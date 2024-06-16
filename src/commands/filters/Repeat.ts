@@ -7,6 +7,7 @@ import { Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string | undefined
 	public name: string[] = ['repeat']
 
 	constructor(client: Client) {
@@ -24,14 +25,13 @@ export default class extends Command {
 
 		const queue = useQueue(msg.guildId)
 
-		if (queue?.isShuffling) {
+		if (queue?.repeatMode == QueueRepeatMode.OFF) {
 			queue.setRepeatMode(QueueRepeatMode.TRACK)
+			msg.react(clientEmojis.enable)
+		} else {
+			queue?.setRepeatMode(QueueRepeatMode.OFF)
 			msg.react(clientEmojis.disable)
-			return
 		}
-
-		queue?.setRepeatMode(QueueRepeatMode.OFF)
-		msg.react(clientEmojis.enable)
 	}
 
 	public loadArgs(args: string[]): unknown {

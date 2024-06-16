@@ -6,6 +6,7 @@ import { Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string = 'count `amount to skip` `number`'
 	public name: string[] = ['skip', 's']
 
 	constructor(client: Client) {

@@ -34,18 +34,15 @@ export default class extends Event {
 			.filter((comamnd: Command) => comamnd.name.includes(commandName))
 			.first()
 
-		if (!command) {
-			sendError(msg, 'wrongCommand')
-			return
+		if (command) {
+			const args = command.loadArgs(
+				params.slice(1).filter((param) => !param.startsWith('--')),
+			)
+			const flags = command.loadFlags(
+				params.slice(1).filter((param) => param.startsWith('--')),
+			)
+
+			command.execute(msg, args, flags)
 		}
-
-		const args = command.loadArgs(
-			params.slice(1).filter((param) => !param.startsWith('--')),
-		)
-		const flags = command.loadFlags(
-			params.slice(1).filter((param) => param.startsWith('--')),
-		)
-
-		command.execute(msg, args, flags)
 	}
 }

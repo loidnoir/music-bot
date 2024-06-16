@@ -15,6 +15,8 @@ import {
 } from 'discord.js'
 
 export default class Queue extends Command {
+	public description?: string =
+		'--go `swap to that song`\n--rem `removes from queue`'
 	public client: Client
 	public name: string[] = ['queue', 'q']
 

@@ -7,6 +7,8 @@ import { Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string | undefined =
+		'name `song name` `text`\n--f `skip current song to play that`'
 	public name: string[] = ['play', 'p']
 
 	constructor(client: Client) {
@@ -28,6 +30,8 @@ export default class extends Command {
 
 		const player = useMainPlayer()
 		let query = args.song
+
+		if (!query) return
 
 		if (flags.var) {
 			const variables = await getVariables(this.client, msg)

@@ -7,6 +7,7 @@ import { Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string | undefined
 	public name: string[] = ['resume', 'rs']
 
 	constructor(client: Client) {

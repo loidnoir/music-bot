@@ -7,6 +7,7 @@ import { Message } from 'discord.js'
 
 export default class extends Command {
 	public client: Client
+	public description?: string | undefined
 	public name: string[] = ['shuffle', 'sh']
 
 	constructor(client: Client) {
@@ -25,13 +26,12 @@ export default class extends Command {
 		const queue = useQueue(msg.guildId)
 
 		if (queue?.isShuffling) {
-			queue.disableShuffle()
+			queue.toggleShuffle(false)
 			msg.react(clientEmojis.disable)
-			return
+		} else {
+			queue?.toggleShuffle()
+			msg.react(clientEmojis.enable)
 		}
-
-		queue?.enableShuffle(true)
-		msg.react(clientEmojis.enable)
 	}
 
 	public loadArgs(args: string[]): unknown {
