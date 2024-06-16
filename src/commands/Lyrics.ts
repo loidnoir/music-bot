@@ -63,8 +63,9 @@ export default class extends Command {
 
 							msg.edit({ embeds: [embed], content: '' })
 						}
-					} catch {
+					} catch(err) {
 						msg.edit('Չգտնվեց...')
+						console.log(err)
 						clearInterval(interval)
 					}
 				})

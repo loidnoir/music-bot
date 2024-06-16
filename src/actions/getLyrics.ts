@@ -1,11 +1,12 @@
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer';
 
 export default async function (prompt: string) {
-	const browser = await puppeteer.launch({ headless: true })
+	const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disabled-setupid-sandbox"] })
 	const page = await browser.newPage()
 
 	try {
 		await page.goto('https://genius.com', { waitUntil: 'networkidle0' })
+		await page.screenshot({ path: 'screen.png' });
 
 		await page.waitForSelector('input[name="q"]')
 		await page.type('input[name="q"]', prompt)
